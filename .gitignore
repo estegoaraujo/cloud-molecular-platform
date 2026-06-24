@@ -1,31 +1,40 @@
-# Web / Frontend
+# ---- Node / Next.js (frontend) ----
 node_modules/
 .next/
-dist/
-build/
-.env
+out/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
 
-# Python / Backend
+# ---- Python (backend) ----
 __pycache__/
 *.py[cod]
-*$py.class
+.venv/
 venv/
-env/
 .pytest_cache/
-.coverage
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
 
-# C++ / Physics Engine (For later integration)
-*.o
-*.out
-CMakeCache.txt
-CMakeFiles/
-Makefile
-cmake_install.cmake
-build/
-bin/
+# ---- Environment / secrets ----
+.env
+.env.*
+!.env.*.example
+*.local
 
-# OS / Misc
+# ---- Editor / OS ----
+.vscode/
+.idea/
 .DS_Store
-*.pdb
+Thumbs.db
+
+# ---- Build / temp artifacts ----
+dist/
+build/
+tmp/
+*.log
+
+# ---- Local simulation scratch files ----
+backend/scratch/
 *.dcd
-*.xyz
+
