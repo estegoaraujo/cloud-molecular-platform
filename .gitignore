@@ -1,0 +1,31 @@
+# Web / Frontend
+node_modules/
+.next/
+dist/
+build/
+.env
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.pytest_cache/
+.coverage
+
+# C++ / Physics Engine (For later integration)
+*.o
+*.out
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+build/
+bin/
+
+# OS / Misc
+.DS_Store
+*.pdb
+*.dcd
+*.xyz
