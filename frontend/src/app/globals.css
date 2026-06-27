@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * ThermRad visual system.
+ *
+ * Concept: a scientific-instrument console. The product watches molecules
+ * destabilize under heat and radiation, so the accent system is a "thermal
+ * ramp" — cold blue (stable) → amber (heating) → magenta-red (bonds breaking).
+ * Everything else stays dark, quiet, and precise so the thermal accent reads as
+ * signal, not decoration.
+ */
+
+:root {
+  --void: #07090e; /* vacuum / deepest background        */
+  --panel: #0e1320; /* instrument panel surface           */
+  --panel-2: #151c2d; /* raised surface / inputs            */
+  --line: #1f2a40; /* hairline borders                   */
+  --ink: #e6eaf2; /* primary text                       */
+  --muted: #7c879e; /* labels, secondary text             */
+
+  --cold: #4c8dff; /* low energy / stable                */
+  --warm: #f5a623; /* heating                            */
+  --hot: #ff4d6d; /* destabilizing / breaking           */
+
+  --ring: rgba(76, 141, 255, 0.55); /* focus ring */
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--void);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  /* Faint instrument-grid backdrop: a calibration grid you'd see behind a
+     readout. Kept very low contrast so it never competes with content. */
+  background-image:
+    linear-gradient(to bottom, rgba(20, 28, 45, 0.35), rgba(7, 9, 14, 0) 480px),
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:
+    100% 480px,
+    44px 44px,
+    44px 44px;
+  background-position:
+    center top,
+    center top,
+    center top;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The grid lines are too strong at full opacity; fade them globally. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(7, 9, 14, 0) 0%,
+    rgba(7, 9, 14, 0.7) 70%,
+    var(--void) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+@layer components {
+  /* Signature element: the thermal ramp. A 2px spectral hairline used as a
+     calibration bar and on the leading edge of key surfaces. */
+  .spectral-ramp {
+    background-image: linear-gradient(
+      90deg,
+      var(--cold) 0%,
+      #6aa9ff 18%,
+      var(--warm) 58%,
+      var(--hot) 100%
+    );
+  }
+
+  /* Instrument panel surface. */
+  .panel {
+    background-color: var(--panel);
+    border: 1px solid var(--line);
+    box-shadow: var(--tw-shadow, 0 24px 60px -30px rgba(0, 0, 0, 0.9));
+    position: relative;
+  }
+
+  /* Mono "readout" label — uppercase, tracked-out, used for eyebrows and
+     instrument captions. */
+  .mono-label {
+    font-family: var(--font-mono), monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+
+  /* Primary action: a heated control. The fill is the hot end of the ramp
+     because pressing it is what applies stress to the structure. */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    color: #1a0a10;
+    background-image: linear-gradient(180deg, #ff6b86, var(--hot));
+    border: 1px solid #ff8499;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1rem;
+    transition:
+      transform 120ms ease,
+      filter 120ms ease;
+  }
+  .btn-primary:hover {
+    filter: brightness(1.06);
+  }
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(0.3);
+  }
+
+  /* Secondary / neutral control. */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    background-color: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 0.625rem 1rem;
+    transition: border-color 120ms ease;
+  }
+  .btn-ghost:hover {
+    border-color: var(--cold);
+  }
+
+  /* Text input styled as an instrument field. */
+  .field {
+    width: 100%;
+    background-color: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    color: var(--ink);
+    font-family: var(--font-mono), monospace;
+    font-size: 0.875rem;
+    transition: border-color 120ms ease;
+  }
+  .field::placeholder {
+    color: var(--muted);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--cold);
+    box-shadow: 0 0 0 3px var(--ring);
+  }
+}
+
+/* Accessibility floor: always-visible keyboard focus. */
+:focus-visible {
+  outline: 2px solid var(--cold);
+  outline-offset: 2px;
+}
+
+/* Respect users who prefer less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
